@@ -7,168 +7,211 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
-body{
-  font-family:'Poppins',sans-serif;
-  background:#001f4d;
-  color:#fff;
-  margin:0;
-  padding:20px;
+* {
+  box-sizing: border-box;
 }
-h1,h2{text-align:center;}
-.tagline{text-align:center;color:#aad4ff;margin-bottom:30px;}
-.products{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:20px;
-  max-width:1200px;
-  margin:0 auto;
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #001f4d;
+  color: #fff;
+  margin: 0;
+  padding: 20px;
 }
-.card{
-  background:#fff;
-  color:#000;
-  border-radius:15px;
-  padding:15px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.2);
-  transition:transform 0.3s;
+
+h1, h2 {
+  text-align: center;
 }
-.card:hover{
-  transform:translateY(-5px);
+
+.tagline {
+  text-align: center;
+  color: #aad4ff;
+  margin-bottom: 30px;
 }
-.card img{
-  width:100%;
-  height:250px;
-  object-fit:cover;
-  border-radius:12px;
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
-.price{font-weight:bold;color:#001f4d;font-size:18px;}
-.oldprice{
-  text-decoration:line-through;
-  color:#555;
-  font-size:14px;
+
+.card {
+  background: #fff;
+  color: #000;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
-.whatsapp{
-  display:block;
-  background:#25D366;
-  color:#fff;
-  padding:10px;
-  text-align:center;
-  border-radius:8px;
-  text-decoration:none;
-  margin-top:10px;
-  transition:background 0.3s;
+
+.card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 12px;
 }
-.whatsapp:hover{
-  background:#20bd5a;
+
+.card h3 {
+  margin: 10px 0;
 }
-.instagram{
-  display:block;
-  background:#C13584;
-  color:#fff;
-  padding:10px;
-  text-align:center;
-  border-radius:8px;
-  text-decoration:none;
-  margin-top:10px;
-  transition:background 0.3s;
+
+.price {
+  font-weight: bold;
+  color: #001f4d;
+  font-size: 18px;
+  margin: 5px 0;
 }
-.instagram:hover{
-  background:#a82d72;
+
+.oldprice {
+  text-decoration: line-through;
+  color: #555;
+  font-size: 14px;
+  margin: 5px 0;
 }
-.admin{
-  background:#00264d;
-  margin-top:40px;
-  padding:20px;
-  border-radius:15px;
-  display:none;
-  max-width:800px;
-  margin-left:auto;
-  margin-right:auto;
+
+.whatsapp {
+  display: block;
+  background: #25D366;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-top: 10px;
+  transition: background 0.3s;
 }
-input,textarea,button{
-  width:100%;
-  padding:10px;
-  margin:6px 0;
-  border-radius:8px;
-  border:1px solid #ccc;
-  box-sizing:border-box;
+
+.whatsapp:hover {
+  background: #1da851;
 }
-input[type=file]{border:none;}
-button{
-  background:#aad4ff;
-  color:#001f4d;
-  border:none;
-  cursor:pointer;
-  font-weight:bold;
-  transition:background 0.3s;
+
+.instagram {
+  display: block;
+  background: #C13584;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-top: 10px;
+  transition: background 0.3s;
 }
-button:hover{
-  background:#88c2ff;
+
+.instagram:hover {
+  background: #a02c6f;
 }
-.manage{
-  background:#003366;
-  padding:15px;
-  margin:8px 0;
-  border-radius:8px;
+
+.admin {
+  background: #00264d;
+  margin-top: 40px;
+  padding: 20px;
+  border-radius: 15px;
+  display: none;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
-.manage button{
-  width:48%;
-  display:inline-block;
-  margin:5px 1%;
+
+input, textarea, button {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-family: 'Poppins', sans-serif;
 }
-.footer{
-  text-align:center;
-  margin-top:40px;
-  font-size:13px;
-  color:#aad4ff;
-  cursor:pointer;
-  text-decoration:underline;
+
+input[type=file] {
+  border: none;
+  padding: 5px 0;
 }
-.footer:hover{
-  color:#88c2ff;
+
+button {
+  background: #aad4ff;
+  color: #001f4d;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
 }
-label{
-  font-size:13px;
-  color:#aad4ff;
-  display:block;
-  margin-top:10px;
+
+button:hover {
+  background: #88b8e8;
 }
-#logoPreview{
-  display:block;
-  width:120px;
-  height:120px;
-  margin:20px auto;
-  object-fit:cover;
-  border:3px solid #aad4ff;
-  border-radius:50%;
-  box-shadow:0 4px 10px rgba(0,0,0,0.3);
+
+.manage {
+  background: #003366;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
-#editModal{
-  background:#001f4d;
-  padding:20px;
-  border-radius:10px;
-  margin-top:20px;
-  border:2px solid #aad4ff;
+
+.manage-info {
+  flex: 1;
+  margin-right: 10px;
 }
-#editImagePreview{
-  width:150px;
-  height:150px;
-  object-fit:cover;
-  margin:10px auto;
-  border-radius:8px;
-  display:none;
-  border:2px solid #aad4ff;
+
+.manage-buttons {
+  display: flex;
+  gap: 5px;
 }
-.delete-btn{
-  background:#ff4444 !important;
+
+.manage-buttons button {
+  width: auto;
+  padding: 8px 15px;
+  margin: 0;
 }
-.delete-btn:hover{
-  background:#cc0000 !important;
+
+.footer {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 13px;
+  color: #aad4ff;
+  cursor: pointer;
 }
-.cancel-btn{
-  background:#666 !important;
+
+.footer:hover {
+  color: #fff;
 }
-.cancel-btn:hover{
-  background:#444 !important;
+
+label {
+  font-size: 13px;
+  color: #aad4ff;
+  display: block;
+  margin-top: 10px;
+}
+
+#logoPreview {
+  display: block;
+  width: 120px;
+  height: 120px;
+  margin: 10px auto;
+  object-fit: cover;
+  border: 3px solid #aad4ff;
+  border-radius: 50%;
+}
+
+#editModal {
+  background: #001f4d;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  border: 2px solid #aad4ff;
+}
+
+#editImagePreview {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin: 10px auto;
+  border-radius: 8px;
+  display: none;
+  border: 2px solid #aad4ff;
 }
 </style>
 </head>
@@ -176,7 +219,7 @@ label{
 <body>
 
 <!-- LOGO -->
-<img id="logoPreview" src="" alt="Logo">
+<img id="logoPreview" src="" alt="Logo" style="display:none;">
 
 <h1>Loom Lyric 🧶</h1>
 <p class="tagline">Stitching melody in every loop</p>
@@ -211,7 +254,7 @@ label{
   <input id="instagramInput" placeholder="Enter Instagram ID">
   <button onclick="updateInstagram()">Update Instagram ID</button>
 
-  <hr style="margin:20px 0; border-color:#aad4ff;">
+  <hr style="margin: 20px 0; border-color: #aad4ff;">
 
   <h3>Add New Product</h3>
   <label>Product Name</label>
@@ -236,9 +279,9 @@ label{
   <input type="file" id="image" accept="image/*">
   
   <button onclick="addProduct()">Add Product</button>
-  <button onclick="logout()" class="cancel-btn">Logout</button>
+  <button onclick="logout()" style="background:#666; margin-top:10px;">Logout</button>
 
-  <hr style="margin:20px 0; border-color:#aad4ff;">
+  <hr style="margin: 20px 0; border-color: #aad4ff;">
 
   <h3>Manage Products</h3>
   <div id="manage"></div>
@@ -270,7 +313,7 @@ label{
     <img id="editImagePreview">
     
     <button onclick="saveEdit()">Save Changes</button>
-    <button onclick="cancelEdit()" class="cancel-btn">Cancel</button>
+    <button onclick="cancelEdit()" style="background:#666;">Cancel</button>
   </div>
 </div>
 
@@ -336,15 +379,15 @@ let instagramID = localStorage.getItem("instagramID") || "loom__lyric";
 let editingIndex = -1;
 
 // Initialize with sample products if empty
-if(products.length === 0){
+if (products.length === 0) {
   products = initialProducts;
   save();
 }
 
 /* ===== LOGO FUNCTIONS ===== */
-function renderLogo(){
+function renderLogo() {
   const preview = document.getElementById("logoPreview");
-  if(logoSrc){
+  if (logoSrc) {
     preview.src = logoSrc;
     preview.style.display = "block";
   } else {
@@ -353,41 +396,43 @@ function renderLogo(){
 }
 renderLogo();
 
-function uploadLogo(){
+function uploadLogo() {
   const file = document.getElementById("logo").files[0];
-  if(!file){ alert("Please select a logo image"); return; }
+  if (!file) {
+    alert("Please select a logo image");
+    return;
+  }
   const reader = new FileReader();
-  reader.onload = function(){
+  reader.onload = function() {
     logoSrc = reader.result;
     localStorage.setItem("loomLogo", logoSrc);
     renderLogo();
     alert("Logo updated successfully!");
-    document.getElementById("logo").value = "";
   };
   reader.readAsDataURL(file);
 }
 
-/* ===== WHATSAPP UPDATE ===== */
-function updateWhatsApp(){
+/* ===== WHATSAPP FUNCTIONS ===== */
+function updateWhatsApp() {
   const num = whatsappInput.value.trim();
-  if(num){
+  if (num) {
     whatsappNumber = num;
     localStorage.setItem("whatsappNumber", whatsappNumber);
-    alert("WhatsApp number updated!");
-    whatsappInput.value="";
+    alert("WhatsApp number updated successfully!");
+    whatsappInput.value = "";
     render();
   } else {
-    alert("Please enter a valid number");
+    alert("Please enter a valid WhatsApp number");
   }
 }
 
-/* ===== INSTAGRAM UPDATE ===== */
-function updateInstagram(){
+/* ===== INSTAGRAM FUNCTIONS ===== */
+function updateInstagram() {
   const id = document.getElementById("instagramInput").value.trim();
-  if(id){
+  if (id) {
     instagramID = id;
     localStorage.setItem("instagramID", instagramID);
-    alert("Instagram ID updated!");
+    alert("Instagram ID updated successfully!");
     document.getElementById("instagramInput").value = "";
     render();
   } else {
@@ -396,14 +441,14 @@ function updateInstagram(){
 }
 
 /* ===== HELPER FUNCTIONS ===== */
-function save(){
+function save() {
   localStorage.setItem("loomProducts", JSON.stringify(products));
 }
 
-function currentPrice(p){
+function currentPrice(p) {
   const now = new Date().toISOString().split("T")[0];
-  if(p.specialPrice && p.startDate && p.endDate){
-    if(now >= p.startDate && now <= p.endDate){
+  if (p.specialPrice && p.startDate && p.endDate) {
+    if (now >= p.startDate && now <= p.endDate) {
       return { price: p.specialPrice, old: p.price };
     }
   }
@@ -411,89 +456,91 @@ function currentPrice(p){
 }
 
 /* ===== RENDER PRODUCTS ===== */
-function render(){
-  let userHTML="", adminHTML="";
-  if(products.length===0){ 
-    userHTML="<p style='text-align:center; grid-column: 1/-1;'>No products yet. Login to admin to add products.</p>"; 
+function render() {
+  let userHTML = "", adminHTML = "";
+  
+  if (products.length === 0) {
+    userHTML = "<p style='text-align:center; grid-column: 1/-1;'>No products available yet</p>";
   }
 
-  products.forEach((p,i)=>{
+  products.forEach((p, i) => {
     const cp = currentPrice(p);
 
-    userHTML+=`
+    userHTML += `
       <div class="card">
         <img src="${p.image}" alt="${p.name}">
         <h3>${p.name}</h3>
-        ${ cp.old ? `<p class="oldprice">₹${cp.old}</p><p class="price">₹${cp.price}</p>` : `<p class="price">₹${cp.price}</p>` }
+        ${cp.old ? `<p class="oldprice">₹${cp.old}</p><p class="price">₹${cp.price}</p>` : `<p class="price">₹${cp.price}</p>`}
         <p>${p.desc || ""}</p>
-        <a class="whatsapp"
-          href="https://wa.me/${whatsappNumber}?text=Hi! I want to order ${encodeURIComponent(p.name)}">
+        <a class="whatsapp" href="https://wa.me/${whatsappNumber}?text=Hi, I want to order ${encodeURIComponent(p.name)}">
           Order on WhatsApp
         </a>
-        <a class="instagram"
-          href="https://www.instagram.com/${instagramID}" target="_blank">
+        <a class="instagram" href="https://www.instagram.com/${instagramID}" target="_blank">
           Contact on Instagram
         </a>
       </div>`;
 
-    adminHTML+=`
+    adminHTML += `
       <div class="manage">
-        <b>${p.name}</b> - ₹${p.price}<br>
-        <small style="color:#aad4ff;">${p.desc ? p.desc.substring(0,50) + '...' : 'No description'}</small><br>
-        <button onclick="editProduct(${i})">✏️ Edit</button>
-        <button onclick="deleteProduct(${i})" class="delete-btn">🗑️ Delete</button>
+        <div class="manage-info">
+          <b>${p.name}</b> - ₹${p.price}
+        </div>
+        <div class="manage-buttons">
+          <button onclick="editProduct(${i})">Edit</button>
+          <button onclick="deleteProduct(${i})" style="background:#ff4444; color:#fff;">Delete</button>
+        </div>
       </div>`;
   });
 
-  productsDiv.innerHTML=userHTML;
-  manageDiv.innerHTML=adminHTML;
+  productsDiv.innerHTML = userHTML;
+  manageDiv.innerHTML = adminHTML;
 }
 
-/* ===== ADMIN LOGIN/LOGOUT ===== */
-function toggleLogin(){ 
-  loginBox.style.display = loginBox.style.display==="block"?"none":"block"; 
+/* ===== ADMIN ACCESS ===== */
+function toggleLogin() {
+  loginBox.style.display = loginBox.style.display === "block" ? "none" : "block";
 }
 
-function login(){
-  if(username.value===USERNAME && password.value===PASSWORD){
-    loginBox.style.display="none";
-    adminPanel.style.display="block";
+function login() {
+  if (username.value === USERNAME && password.value === PASSWORD) {
+    loginBox.style.display = "none";
+    adminPanel.style.display = "block";
     username.value = "";
     password.value = "";
-  }else{ 
-    alert("Wrong username or password!"); 
+  } else {
+    alert("Wrong username or password!");
   }
 }
 
-function logout(){ 
-  adminPanel.style.display="none";
-  document.getElementById("editModal").style.display="none";
+function logout() {
+  adminPanel.style.display = "none";
+  alert("Logged out successfully!");
 }
 
-/* ===== ADD NEW PRODUCT ===== */
-function addProduct(){
+/* ===== ADD PRODUCT ===== */
+function addProduct() {
   const nameVal = document.getElementById("name").value.trim();
   const priceVal = document.getElementById("price").value.trim();
   const file = document.getElementById("image").files[0];
   
-  if(!nameVal || !priceVal){ 
-    alert("Please enter product name and price"); 
-    return; 
+  if (!nameVal || !priceVal) {
+    alert("Please enter product name and price");
+    return;
   }
-  if(!file){ 
-    alert("Please select a product image"); 
-    return; 
+  if (!file) {
+    alert("Please select a product image");
+    return;
   }
 
   const reader = new FileReader();
-  reader.onload = function(){
+  reader.onload = function() {
     products.push({
       name: nameVal,
       price: priceVal,
-      specialPrice: document.getElementById("specialPrice").value.trim(),
-      startDate: document.getElementById("startDate").value,
-      endDate: document.getElementById("endDate").value,
-      desc: document.getElementById("desc").value.trim(),
+      specialPrice: specialPrice.value,
+      startDate: startDate.value,
+      endDate: endDate.value,
+      desc: desc.value,
       image: reader.result
     });
     save();
@@ -514,9 +561,9 @@ function addProduct(){
 }
 
 /* ===== DELETE PRODUCT ===== */
-function deleteProduct(i){
-  if(confirm("Are you sure you want to delete this product?")){
-    products.splice(i,1);
+function deleteProduct(i) {
+  if (confirm("Are you sure you want to delete this product?")) {
+    products.splice(i, 1);
     save();
     render();
     alert("Product deleted successfully!");
@@ -524,11 +571,82 @@ function deleteProduct(i){
 }
 
 /* ===== EDIT PRODUCT ===== */
-function editProduct(i){
+function editProduct(i) {
   editingIndex = i;
   const p = products[i];
   
-  // Fill the edit form with current data
+  // Fill the edit form with current values
   document.getElementById("editName").value = p.name;
   document.getElementById("editPrice").value = p.price;
-  document.getElementById("editSpecialPrice").value = p.specialPrice ||
+  document.getElementById("editSpecialPrice").value = p.specialPrice || "";
+  document.getElementById("editStartDate").value = p.startDate || "";
+  document.getElementById("editEndDate").value = p.endDate || "";
+  document.getElementById("editDesc").value = p.desc || "";
+  
+  // Show current image
+  const preview = document.getElementById("editImagePreview");
+  preview.src = p.image;
+  preview.style.display = "block";
+  
+  // Show edit modal
+  document.getElementById("editModal").style.display = "block";
+  
+  // Scroll to edit form
+  document.getElementById("editModal").scrollIntoView({ behavior: "smooth" });
+}
+
+function saveEdit() {
+  if (editingIndex === -1) return;
+  
+  const nameVal = document.getElementById("editName").value.trim();
+  const priceVal = document.getElementById("editPrice").value.trim();
+  
+  if (!nameVal || !priceVal) {
+    alert("Please enter product name and price");
+    return;
+  }
+  
+  const file = document.getElementById("editImage").files[0];
+  
+  // If new image is selected, read it
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function() {
+      updateProductData(reader.result);
+    };
+    reader.readAsDataURL(file);
+  } else {
+    // Keep the existing image
+    updateProductData(products[editingIndex].image);
+  }
+}
+
+function updateProductData(imageData) {
+  products[editingIndex] = {
+    name: document.getElementById("editName").value.trim(),
+    price: document.getElementById("editPrice").value.trim(),
+    specialPrice: document.getElementById("editSpecialPrice").value.trim(),
+    startDate: document.getElementById("editStartDate").value,
+    endDate: document.getElementById("editEndDate").value,
+    desc: document.getElementById("editDesc").value.trim(),
+    image: imageData
+  };
+  
+  save();
+  render();
+  cancelEdit();
+  alert("Product updated successfully!");
+}
+
+function cancelEdit() {
+  editingIndex = -1;
+  document.getElementById("editModal").style.display = "none";
+  document.getElementById("editImage").value = "";
+}
+
+/* ===== INITIAL LOAD ===== */
+render();
+</script>
+
+</body>
+</html>
