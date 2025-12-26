@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Loom Lyric 🧶</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
@@ -19,6 +20,8 @@ h1,h2{text-align:center;}
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
   gap:20px;
+  max-width:1200px;
+  margin:0 auto;
 }
 .card{
   background:#fff;
@@ -26,6 +29,10 @@ h1,h2{text-align:center;}
   border-radius:15px;
   padding:15px;
   box-shadow:0 5px 15px rgba(0,0,0,0.2);
+  transition:transform 0.3s;
+}
+.card:hover{
+  transform:translateY(-5px);
 }
 .card img{
   width:100%;
@@ -33,7 +40,7 @@ h1,h2{text-align:center;}
   object-fit:cover;
   border-radius:12px;
 }
-.price{font-weight:bold;color:#001f4d;}
+.price{font-weight:bold;color:#001f4d;font-size:18px;}
 .oldprice{
   text-decoration:line-through;
   color:#555;
@@ -48,6 +55,10 @@ h1,h2{text-align:center;}
   border-radius:8px;
   text-decoration:none;
   margin-top:10px;
+  transition:background 0.3s;
+}
+.whatsapp:hover{
+  background:#20bd5a;
 }
 .instagram{
   display:block;
@@ -58,6 +69,10 @@ h1,h2{text-align:center;}
   border-radius:8px;
   text-decoration:none;
   margin-top:10px;
+  transition:background 0.3s;
+}
+.instagram:hover{
+  background:#a82d72;
 }
 .admin{
   background:#00264d;
@@ -65,6 +80,9 @@ h1,h2{text-align:center;}
   padding:20px;
   border-radius:15px;
   display:none;
+  max-width:800px;
+  margin-left:auto;
+  margin-right:auto;
 }
 input,textarea,button{
   width:100%;
@@ -72,6 +90,7 @@ input,textarea,button{
   margin:6px 0;
   border-radius:8px;
   border:1px solid #ccc;
+  box-sizing:border-box;
 }
 input[type=file]{border:none;}
 button{
@@ -80,12 +99,21 @@ button{
   border:none;
   cursor:pointer;
   font-weight:bold;
+  transition:background 0.3s;
+}
+button:hover{
+  background:#88c2ff;
 }
 .manage{
   background:#003366;
-  padding:10px;
+  padding:15px;
   margin:8px 0;
   border-radius:8px;
+}
+.manage button{
+  width:48%;
+  display:inline-block;
+  margin:5px 1%;
 }
 .footer{
   text-align:center;
@@ -93,16 +121,54 @@ button{
   font-size:13px;
   color:#aad4ff;
   cursor:pointer;
+  text-decoration:underline;
 }
-label{font-size:13px;color:#aad4ff;}
+.footer:hover{
+  color:#88c2ff;
+}
+label{
+  font-size:13px;
+  color:#aad4ff;
+  display:block;
+  margin-top:10px;
+}
 #logoPreview{
   display:block;
-  width:150px;
-  height:80px;
-  margin:10px auto;
-  object-fit:contain;
+  width:120px;
+  height:120px;
+  margin:20px auto;
+  object-fit:cover;
+  border:3px solid #aad4ff;
+  border-radius:50%;
+  box-shadow:0 4px 10px rgba(0,0,0,0.3);
+}
+#editModal{
+  background:#001f4d;
+  padding:20px;
+  border-radius:10px;
+  margin-top:20px;
   border:2px solid #aad4ff;
+}
+#editImagePreview{
+  width:150px;
+  height:150px;
+  object-fit:cover;
+  margin:10px auto;
   border-radius:8px;
+  display:none;
+  border:2px solid #aad4ff;
+}
+.delete-btn{
+  background:#ff4444 !important;
+}
+.delete-btn:hover{
+  background:#cc0000 !important;
+}
+.cancel-btn{
+  background:#666 !important;
+}
+.cancel-btn:hover{
+  background:#444 !important;
 }
 </style>
 </head>
@@ -132,7 +198,7 @@ label{font-size:13px;color:#aad4ff;}
 
   <!-- Logo Upload -->
   <label>Upload / Change Logo</label>
-  <input type="file" id="logo">
+  <input type="file" id="logo" accept="image/*">
   <button onclick="uploadLogo()">Update Logo</button>
 
   <!-- WhatsApp number update -->
@@ -145,46 +211,137 @@ label{font-size:13px;color:#aad4ff;}
   <input id="instagramInput" placeholder="Enter Instagram ID">
   <button onclick="updateInstagram()">Update Instagram ID</button>
 
+  <hr style="margin:20px 0; border-color:#aad4ff;">
+
+  <h3>Add New Product</h3>
+  <label>Product Name</label>
   <input id="name" placeholder="Product Name">
-  <input id="price" placeholder="Normal Price">
-  <input id="specialPrice" placeholder="Special Price (optional)">
+  
+  <label>Normal Price</label>
+  <input id="price" placeholder="Normal Price" type="number">
+  
+  <label>Special Price (optional)</label>
+  <input id="specialPrice" placeholder="Special Price (optional)" type="number">
   
   <label>Special Price Start</label>
   <input type="date" id="startDate">
+  
   <label>Special Price End</label>
   <input type="date" id="endDate">
 
-  <textarea id="desc" placeholder="Description"></textarea>
-  <input type="file" id="image">
+  <label>Description</label>
+  <textarea id="desc" placeholder="Description" rows="3"></textarea>
+  
+  <label>Product Image</label>
+  <input type="file" id="image" accept="image/*">
+  
   <button onclick="addProduct()">Add Product</button>
-  <button onclick="logout()">Logout</button>
+  <button onclick="logout()" class="cancel-btn">Logout</button>
+
+  <hr style="margin:20px 0; border-color:#aad4ff;">
 
   <h3>Manage Products</h3>
   <div id="manage"></div>
+  
+  <!-- Edit Product Modal -->
+  <div id="editModal" style="display:none;">
+    <h3>Edit Product</h3>
+    <label>Product Name</label>
+    <input id="editName" placeholder="Product Name">
+    
+    <label>Normal Price</label>
+    <input id="editPrice" placeholder="Normal Price" type="number">
+    
+    <label>Special Price (optional)</label>
+    <input id="editSpecialPrice" placeholder="Special Price" type="number">
+    
+    <label>Special Price Start</label>
+    <input type="date" id="editStartDate">
+    
+    <label>Special Price End</label>
+    <input type="date" id="editEndDate">
+    
+    <label>Description</label>
+    <textarea id="editDesc" placeholder="Description" rows="3"></textarea>
+    
+    <label>Change Image (optional - leave empty to keep current)</label>
+    <input type="file" id="editImage" accept="image/*">
+    
+    <img id="editImagePreview">
+    
+    <button onclick="saveEdit()">Save Changes</button>
+    <button onclick="cancelEdit()" class="cancel-btn">Cancel</button>
+  </div>
 </div>
 
 <div class="footer" onclick="toggleLogin()">Admin Access</div>
 
 <script>
-/* ===== LOGIN ===== */
+/* ===== LOGIN CREDENTIALS ===== */
 const USERNAME = "Harshali";
 const PASSWORD = "Harshali@123";
 
-/* ELEMENTS */
+/* ===== ELEMENTS ===== */
 const productsDiv = document.getElementById("products");
 const manageDiv = document.getElementById("manage");
 const adminPanel = document.getElementById("adminPanel");
 const loginBox = document.getElementById("loginBox");
-const logoPreview = document.getElementById("logo");
 const whatsappInput = document.getElementById("whatsappNumber");
 
-/* ===== DATA ===== */
+/* ===== INITIAL SAMPLE PRODUCTS ===== */
+const initialProducts = [
+  {
+    name: "Handmade Crochet Bag",
+    price: "450",
+    desc: "Beautiful handcrafted crochet bag, perfect for daily use",
+    image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&h=400&fit=crop"
+  },
+  {
+    name: "Crochet Tote Bag",
+    price: "500",
+    desc: "Stylish crochet tote bag with sturdy handles",
+    image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&h=400&fit=crop"
+  },
+  {
+    name: "Mini Crochet Purse",
+    price: "350",
+    desc: "Cute mini purse perfect for essentials",
+    image: "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=400&fit=crop"
+  },
+  {
+    name: "Crochet Shoulder Bag",
+    price: "550",
+    desc: "Elegant shoulder bag with adjustable strap",
+    image: "https://images.unsplash.com/photo-1564422170194-896b89110ef8?w=400&h=400&fit=crop"
+  },
+  {
+    name: "Boho Crochet Bag",
+    price: "600",
+    desc: "Bohemian style crochet bag with fringe details",
+    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=400&fit=crop"
+  },
+  {
+    name: "Crochet Clutch",
+    price: "400",
+    desc: "Handmade crochet clutch for special occasions",
+    image: "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=400&fit=crop&q=80"
+  }
+];
+
+/* ===== DATA STORAGE ===== */
 let products = JSON.parse(localStorage.getItem("loomProducts")) || [];
 let logoSrc = localStorage.getItem("loomLogo") || "";
-let whatsappNumber = localStorage.getItem("whatsappNumber") || "91YOURNUMBER";
+let whatsappNumber = localStorage.getItem("whatsappNumber") || "919876543210";
 let instagramID = localStorage.getItem("instagramID") || "loom__lyric";
+let editingIndex = -1;
 
-/* ===== LOGO ===== */
+// Initialize with sample products if empty
+if(products.length === 0){
+  products = initialProducts;
+  save();
+}
+
+/* ===== LOGO FUNCTIONS ===== */
 function renderLogo(){
   const preview = document.getElementById("logoPreview");
   if(logoSrc){
@@ -198,17 +355,19 @@ renderLogo();
 
 function uploadLogo(){
   const file = document.getElementById("logo").files[0];
-  if(!file){ alert("Select a logo"); return; }
+  if(!file){ alert("Please select a logo image"); return; }
   const reader = new FileReader();
   reader.onload = function(){
     logoSrc = reader.result;
     localStorage.setItem("loomLogo", logoSrc);
     renderLogo();
+    alert("Logo updated successfully!");
+    document.getElementById("logo").value = "";
   };
   reader.readAsDataURL(file);
 }
 
-/* ===== WhatsApp ===== */
+/* ===== WHATSAPP UPDATE ===== */
 function updateWhatsApp(){
   const num = whatsappInput.value.trim();
   if(num){
@@ -218,11 +377,11 @@ function updateWhatsApp(){
     whatsappInput.value="";
     render();
   } else {
-    alert("Enter a valid number");
+    alert("Please enter a valid number");
   }
 }
 
-/* ===== Instagram ===== */
+/* ===== INSTAGRAM UPDATE ===== */
 function updateInstagram(){
   const id = document.getElementById("instagramInput").value.trim();
   if(id){
@@ -232,11 +391,11 @@ function updateInstagram(){
     document.getElementById("instagramInput").value = "";
     render();
   } else {
-    alert("Enter a valid Instagram ID");
+    alert("Please enter a valid Instagram ID");
   }
 }
 
-/* ===== HELPERS ===== */
+/* ===== HELPER FUNCTIONS ===== */
 function save(){
   localStorage.setItem("loomProducts", JSON.stringify(products));
 }
@@ -251,22 +410,24 @@ function currentPrice(p){
   return { price: p.price };
 }
 
-/* ===== RENDER ===== */
+/* ===== RENDER PRODUCTS ===== */
 function render(){
   let userHTML="", adminHTML="";
-  if(products.length===0){ userHTML="<p style='text-align:center;'>No products yet</p>"; }
+  if(products.length===0){ 
+    userHTML="<p style='text-align:center; grid-column: 1/-1;'>No products yet. Login to admin to add products.</p>"; 
+  }
 
   products.forEach((p,i)=>{
     const cp = currentPrice(p);
 
     userHTML+=`
       <div class="card">
-        <img src="${p.image}">
+        <img src="${p.image}" alt="${p.name}">
         <h3>${p.name}</h3>
         ${ cp.old ? `<p class="oldprice">₹${cp.old}</p><p class="price">₹${cp.price}</p>` : `<p class="price">₹${cp.price}</p>` }
         <p>${p.desc || ""}</p>
         <a class="whatsapp"
-          href="https://wa.me/${whatsappNumber}?text=I want to order ${p.name}">
+          href="https://wa.me/${whatsappNumber}?text=Hi! I want to order ${encodeURIComponent(p.name)}">
           Order on WhatsApp
         </a>
         <a class="instagram"
@@ -278,8 +439,9 @@ function render(){
     adminHTML+=`
       <div class="manage">
         <b>${p.name}</b> - ₹${p.price}<br>
-        <button onclick="editProduct(${i})">Edit</button>
-        <button onclick="deleteProduct(${i})">Delete</button>
+        <small style="color:#aad4ff;">${p.desc ? p.desc.substring(0,50) + '...' : 'No description'}</small><br>
+        <button onclick="editProduct(${i})">✏️ Edit</button>
+        <button onclick="deleteProduct(${i})" class="delete-btn">🗑️ Delete</button>
       </div>`;
   });
 
@@ -287,65 +449,86 @@ function render(){
   manageDiv.innerHTML=adminHTML;
 }
 
-/* ===== ADMIN ACCESS ===== */
-function toggleLogin(){ loginBox.style.display = loginBox.style.display==="block"?"none":"block"; }
+/* ===== ADMIN LOGIN/LOGOUT ===== */
+function toggleLogin(){ 
+  loginBox.style.display = loginBox.style.display==="block"?"none":"block"; 
+}
+
 function login(){
   if(username.value===USERNAME && password.value===PASSWORD){
     loginBox.style.display="none";
     adminPanel.style.display="block";
-  }else{ alert("Wrong login"); }
+    username.value = "";
+    password.value = "";
+  }else{ 
+    alert("Wrong username or password!"); 
+  }
 }
-function logout(){ adminPanel.style.display="none"; }
 
-/* ===== ADD PRODUCT ===== */
+function logout(){ 
+  adminPanel.style.display="none";
+  document.getElementById("editModal").style.display="none";
+}
+
+/* ===== ADD NEW PRODUCT ===== */
 function addProduct(){
+  const nameVal = document.getElementById("name").value.trim();
+  const priceVal = document.getElementById("price").value.trim();
   const file = document.getElementById("image").files[0];
-  if(!file){ alert("Please select image"); return; }
+  
+  if(!nameVal || !priceVal){ 
+    alert("Please enter product name and price"); 
+    return; 
+  }
+  if(!file){ 
+    alert("Please select a product image"); 
+    return; 
+  }
 
   const reader = new FileReader();
   reader.onload = function(){
     products.push({
-      name:name.value,
-      price:price.value,
-      specialPrice:specialPrice.value,
-      startDate:startDate.value,
-      endDate:endDate.value,
-      desc:desc.value,
-      image:reader.result
+      name: nameVal,
+      price: priceVal,
+      specialPrice: document.getElementById("specialPrice").value.trim(),
+      startDate: document.getElementById("startDate").value,
+      endDate: document.getElementById("endDate").value,
+      desc: document.getElementById("desc").value.trim(),
+      image: reader.result
     });
     save();
     render();
-    name.value=price.value=specialPrice.value=startDate.value=endDate.value=desc.value="";
-    image.value="";
+    
+    // Clear form
+    document.getElementById("name").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("specialPrice").value = "";
+    document.getElementById("startDate").value = "";
+    document.getElementById("endDate").value = "";
+    document.getElementById("desc").value = "";
+    document.getElementById("image").value = "";
+    
+    alert("Product added successfully!");
   };
   reader.readAsDataURL(file);
 }
 
-/* ===== DELETE ===== */
+/* ===== DELETE PRODUCT ===== */
 function deleteProduct(i){
-  if(confirm("Delete product?")){
+  if(confirm("Are you sure you want to delete this product?")){
     products.splice(i,1);
     save();
     render();
+    alert("Product deleted successfully!");
   }
 }
 
-/* ===== EDIT ===== */
+/* ===== EDIT PRODUCT ===== */
 function editProduct(i){
+  editingIndex = i;
   const p = products[i];
-  const n = prompt("Name:",p.name);
-  const pr = prompt("Normal Price:",p.price);
-  const sp = prompt("Special Price:",p.specialPrice || "");
-  if(n && pr){
-    products[i] = {...p,name:n,price:pr,specialPrice:sp};
-    save();
-    render();
-  }
-}
-
-/* ===== INITIAL LOAD ===== */
-render();
-</script>
-
-</body>
-</html>
+  
+  // Fill the edit form with current data
+  document.getElementById("editName").value = p.name;
+  document.getElementById("editPrice").value = p.price;
+  document.getElementById("editSpecialPrice").value = p.specialPrice ||
