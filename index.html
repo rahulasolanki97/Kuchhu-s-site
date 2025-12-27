@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - JSON File Generator</title>
+    <title>Loom Lyric 🧶</title>
     <style>
         * {
             margin: 0;
@@ -14,8 +14,8 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
             min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
@@ -23,356 +23,468 @@
             margin: 0 auto;
         }
 
+        /* Header */
         .header {
             background: white;
             padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        .logo {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 15px;
             border-radius: 10px;
-            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #764ba2;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: #666;
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            color: white;
+        }
+
+        .whatsapp-btn {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+        }
+
+        .instagram-btn {
+            background: linear-gradient(135deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Products Section */
+        .products-section {
+            margin-top: 30px;
+        }
+
+        .section-title {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
 
-        h1 {
+        .section-title h2 {
+            color: #764ba2;
+            font-size: 2em;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-name {
+            font-size: 1.5em;
             color: #764ba2;
             margin-bottom: 10px;
         }
 
-        .alert {
+        .product-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .normal-price {
+            font-size: 1.3em;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .special-price {
+            font-size: 1.5em;
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .original-price {
+            font-size: 1.1em;
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .discount-badge {
+            background: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .order-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .order-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        .error-message {
             background: #fff3cd;
             border: 1px solid #ffc107;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-
-        .section {
-            background: white;
-            padding: 25px;
+            padding: 20px;
             border-radius: 10px;
-            margin-bottom: 20px;
+            text-align: center;
+            color: #856404;
+        }
+
+        /* Admin Login */
+        .admin-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-top: 30px;
+            text-align: center;
         }
 
-        h2 {
-            color: #764ba2;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #764ba2;
-            padding-bottom: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        input[type="text"],
-        input[type="number"],
-        input[type="date"],
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        input:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #764ba2;
-        }
-
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .btn {
+        .admin-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 12px 30px;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.3s;
         }
 
-        .btn:hover {
+        .admin-btn:hover {
             transform: translateY(-2px);
         }
 
-        .btn-secondary {
-            background: #6c757d;
-        }
-
-        .btn-danger {
-            background: #dc3545;
-        }
-
-        .product-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            border-left: 4px solid #764ba2;
-        }
-
-        .product-item h3 {
-            color: #764ba2;
-            margin-bottom: 10px;
-        }
-
-        .product-actions {
-            margin-top: 10px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .json-output {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 20px;
-            border-radius: 5px;
-            overflow-x: auto;
-            margin-top: 20px;
-            font-family: 'Courier New', monospace;
-            white-space: pre-wrap;
-        }
-
-        .copy-btn {
-            margin-top: 10px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .grid {
-                grid-template-columns: 1fr;
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border: 1px solid #c3e6cb;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .social-links {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            <h1>🧶 Loom Lyric Admin - JSON Generator</h1>
-            <div class="alert">
-                <strong>📝 Instructions:</strong>
-                <ol style="margin-top: 10px; margin-left: 20px;">
-                    <li>Fill in your website settings and products below</li>
-                    <li>Click "Generate JSON Files" button</li>
-                    <li>Copy the generated JSON code</li>
-                    <li>Create files in your GitHub repository as shown</li>
-                    <li>Commit and push changes to GitHub</li>
-                </ol>
-            </div>
-        </div>
-
-        <!-- Settings Section -->
-        <div class="section">
-            <h2>⚙️ Website Settings</h2>
-            <div class="form-group">
-                <label>Logo URL:</label>
-                <input type="text" id="logoUrl" placeholder="https://example.com/logo.png">
-            </div>
-            <div class="grid">
-                <div class="form-group">
-                    <label>WhatsApp Number:</label>
-                    <input type="text" id="whatsapp" placeholder="1234567890">
-                </div>
-                <div class="form-group">
-                    <label>Instagram ID:</label>
-                    <input type="text" id="instagram" placeholder="@your_instagram">
-                </div>
+            <img id="logo" class="logo" src="" alt="Logo" style="display: none;">
+            <h1>Loom Lyric 🧶</h1>
+            <p class="tagline">Stitching melody in every loop</p>
+            
+            <div class="social-links">
+                <a href="#" class="social-btn whatsapp-btn" id="whatsappLink" style="display: none;">
+                    <span>💬</span> WhatsApp
+                </a>
+                <a href="#" class="social-btn instagram-btn" id="instagramLink" style="display: none;">
+                    <span>📷</span> Instagram
+                </a>
             </div>
         </div>
 
         <!-- Products Section -->
-        <div class="section">
-            <h2>🛍️ Products</h2>
-            
-            <div id="productsList"></div>
+        <div class="products-section">
+            <div class="section-title">
+                <h2>Our Handmade Products</h2>
+            </div>
 
-            <h3 style="margin-top: 30px; margin-bottom: 15px;">Add New Product</h3>
-            <div class="form-group">
-                <label>Product Name:</label>
-                <input type="text" id="productName" placeholder="Crochet Keychain">
+            <div id="loadingMessage" class="loading">
+                Loading products... 🧶
             </div>
-            <div class="grid">
-                <div class="form-group">
-                    <label>Normal Price:</label>
-                    <input type="number" id="normalPrice" placeholder="100">
-                </div>
-                <div class="form-group">
-                    <label>Special Price (optional):</label>
-                    <input type="number" id="specialPrice" placeholder="80">
-                </div>
-            </div>
-            <div class="grid">
-                <div class="form-group">
-                    <label>Special Price Start:</label>
-                    <input type="date" id="specialStart">
-                </div>
-                <div class="form-group">
-                    <label>Special Price End:</label>
-                    <input type="date" id="specialEnd">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Description:</label>
-                <textarea id="description" placeholder="Product description..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>Image URL:</label>
-                <input type="text" id="imageUrl" placeholder="https://example.com/product.jpg">
-            </div>
-            <button class="btn" onclick="addProduct()">➕ Add Product</button>
+
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+            <div id="productsGrid" class="products-grid"></div>
         </div>
 
-        <!-- Generate Section -->
-        <div class="section">
-            <h2>📄 Generated JSON Files</h2>
-            <button class="btn" onclick="generateJSON()">🔄 Generate JSON Files</button>
-            
-            <div id="outputSection" style="display: none;">
-                <div class="success-message">
-                    ✅ JSON files generated successfully! Follow the instructions below.
-                </div>
-
-                <h3 style="margin-top: 20px;">1. Create file: <code>data/settings.json</code></h3>
-                <div class="json-output" id="settingsJSON"></div>
-                <button class="btn copy-btn" onclick="copyToClipboard('settingsJSON')">📋 Copy settings.json</button>
-
-                <h3 style="margin-top: 30px;">2. Create file: <code>data/products.json</code></h3>
-                <div class="json-output" id="productsJSON"></div>
-                <button class="btn copy-btn" onclick="copyToClipboard('productsJSON')">📋 Copy products.json</button>
-
-                <div class="alert" style="margin-top: 30px;">
-                    <strong>🚀 Next Steps:</strong>
-                    <ol style="margin-top: 10px; margin-left: 20px;">
-                        <li>Go to your GitHub repository</li>
-                        <li>Create a folder named <code>data</code></li>
-                        <li>Create <code>settings.json</code> inside data folder and paste the first JSON</li>
-                        <li>Create <code>products.json</code> inside data folder and paste the second JSON</li>
-                        <li>Commit and push changes</li>
-                        <li>Wait 2-3 minutes for GitHub Pages to update</li>
-                        <li>Update your main website code to read from these JSON files</li>
-                    </ol>
-                </div>
-            </div>
+        <!-- Admin Section -->
+        <div class="admin-section">
+            <h3 style="color: #764ba2; margin-bottom: 15px;">Admin Access</h3>
+            <p style="color: #666; margin-bottom: 15px;">
+                Use the Admin JSON Generator to update products and settings
+            </p>
+            <button class="admin-btn" onclick="window.open('admin.html', '_blank')">
+                🔧 Open Admin Panel
+            </button>
         </div>
     </div>
 
     <script>
-        let products = [];
+        // GitHub repository details - UPDATE THESE WITH YOUR INFO
+        const GITHUB_USERNAME = 'rahulasolanki97';
+        const REPO_NAME = 'Kuchhu-s-site';
+        const BRANCH = 'main'; // or 'master' - check your repo
 
-        function addProduct() {
-            const product = {
-                id: Date.now(),
-                name: document.getElementById('productName').value,
-                normalPrice: parseFloat(document.getElementById('normalPrice').value) || 0,
-                specialPrice: parseFloat(document.getElementById('specialPrice').value) || null,
-                specialPriceStart: document.getElementById('specialStart').value || null,
-                specialPriceEnd: document.getElementById('specialEnd').value || null,
-                description: document.getElementById('description').value,
-                image: document.getElementById('imageUrl').value
-            };
+        // Construct URLs for JSON files
+        const SETTINGS_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/${BRANCH}/data/settings.json`;
+        const PRODUCTS_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/${BRANCH}/data/products.json`;
 
-            if (!product.name || !product.normalPrice || !product.image) {
-                alert('Please fill in Product Name, Normal Price, and Image URL');
-                return;
+        // Load settings and products
+        async function loadWebsite() {
+            try {
+                // Load settings
+                await loadSettings();
+                
+                // Load products
+                await loadProducts();
+                
+                document.getElementById('loadingMessage').style.display = 'none';
+            } catch (error) {
+                console.error('Error loading website:', error);
+                showError('Failed to load website data. Please make sure JSON files are uploaded to GitHub.');
             }
-
-            products.push(product);
-            displayProducts();
-            clearProductForm();
         }
 
-        function displayProducts() {
-            const list = document.getElementById('productsList');
+        async function loadSettings() {
+            try {
+                const response = await fetch(SETTINGS_URL);
+                if (!response.ok) throw new Error('Settings file not found');
+                
+                const settings = await response.json();
+                
+                // Set logo
+                if (settings.logo) {
+                    const logoImg = document.getElementById('logo');
+                    logoImg.src = settings.logo;
+                    logoImg.style.display = 'block';
+                }
+                
+                // Set WhatsApp link
+                if (settings.whatsapp) {
+                    const whatsappLink = document.getElementById('whatsappLink');
+                    whatsappLink.href = `https://wa.me/${settings.whatsapp}`;
+                    whatsappLink.style.display = 'inline-flex';
+                }
+                
+                // Set Instagram link
+                if (settings.instagram) {
+                    const instagramLink = document.getElementById('instagramLink');
+                    const username = settings.instagram.replace('@', '');
+                    instagramLink.href = `https://instagram.com/${username}`;
+                    instagramLink.style.display = 'inline-flex';
+                }
+            } catch (error) {
+                console.warn('Settings not loaded:', error);
+            }
+        }
+
+        async function loadProducts() {
+            try {
+                const response = await fetch(PRODUCTS_URL);
+                if (!response.ok) throw new Error('Products file not found');
+                
+                const data = await response.json();
+                const products = data.products || [];
+                
+                displayProducts(products);
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        function displayProducts(products) {
+            const grid = document.getElementById('productsGrid');
+            
             if (products.length === 0) {
-                list.innerHTML = '<p style="color: #999;">No products added yet.</p>';
+                grid.innerHTML = '<div class="error-message">No products available yet.</div>';
                 return;
             }
 
-            list.innerHTML = products.map((product, index) => `
-                <div class="product-item">
-                    <h3>${product.name}</h3>
-                    <p><strong>Price:</strong> ₹${product.normalPrice} ${product.specialPrice ? `<span style="color: #dc3545;">(Special: ₹${product.specialPrice})</span>` : ''}</p>
-                    <p><strong>Description:</strong> ${product.description}</p>
-                    <div class="product-actions">
-                        <button class="btn btn-danger" onclick="deleteProduct(${index})">🗑️ Delete</button>
+            grid.innerHTML = products.map(product => {
+                const hasSpecialPrice = isSpecialPriceActive(product);
+                const discount = hasSpecialPrice ? 
+                    Math.round(((product.normalPrice - product.specialPrice) / product.normalPrice) * 100) : 0;
+
+                return `
+                    <div class="product-card">
+                        <img src="${product.image}" alt="${product.name}" class="product-image">
+                        <div class="product-info">
+                            <h3 class="product-name">${product.name}</h3>
+                            <p class="product-description">${product.description}</p>
+                            
+                            <div class="price-container">
+                                ${hasSpecialPrice ? `
+                                    <span class="special-price">₹${product.specialPrice}</span>
+                                    <span class="original-price">₹${product.normalPrice}</span>
+                                    <span class="discount-badge">${discount}% OFF</span>
+                                ` : `
+                                    <span class="normal-price">₹${product.normalPrice}</span>
+                                `}
+                            </div>
+                            
+                            <button class="order-btn" onclick="orderProduct('${product.name}', ${hasSpecialPrice ? product.specialPrice : product.normalPrice})">
+                                <span>🛒</span> Order Now
+                            </button>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
-        function deleteProduct(index) {
-            if (confirm('Are you sure you want to delete this product?')) {
-                products.splice(index, 1);
-                displayProducts();
+        function isSpecialPriceActive(product) {
+            if (!product.specialPrice || !product.specialPriceStart || !product.specialPriceEnd) {
+                return false;
             }
+
+            const today = new Date();
+            const startDate = new Date(product.specialPriceStart);
+            const endDate = new Date(product.specialPriceEnd);
+
+            return today >= startDate && today <= endDate;
         }
 
-        function clearProductForm() {
-            document.getElementById('productName').value = '';
-            document.getElementById('normalPrice').value = '';
-            document.getElementById('specialPrice').value = '';
-            document.getElementById('specialStart').value = '';
-            document.getElementById('specialEnd').value = '';
-            document.getElementById('description').value = '';
-            document.getElementById('imageUrl').value = '';
+        function orderProduct(productName, price) {
+            // Get WhatsApp number from settings
+            fetch(SETTINGS_URL)
+                .then(response => response.json())
+                .then(settings => {
+                    if (settings.whatsapp) {
+                        const message = `Hi! I'm interested in ordering ${productName} (₹${price})`;
+                        const url = `https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(message)}`;
+                        window.open(url, '_blank');
+                    } else {
+                        alert('WhatsApp number not configured. Please contact the admin.');
+                    }
+                })
+                .catch(error => {
+                    alert('Failed to process order. Please try again.');
+                });
         }
 
-        function generateJSON() {
-            const settings = {
-                logo: document.getElementById('logoUrl').value || '',
-                whatsapp: document.getElementById('whatsapp').value || '',
-                instagram: document.getElementById('instagram').value || ''
-            };
-
-            const settingsJSON = JSON.stringify(settings, null, 2);
-            const productsJSON = JSON.stringify({ products: products }, null, 2);
-
-            document.getElementById('settingsJSON').textContent = settingsJSON;
-            document.getElementById('productsJSON').textContent = productsJSON;
-            document.getElementById('outputSection').style.display = 'block';
-
-            // Scroll to output
-            document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
+        function showError(message) {
+            document.getElementById('loadingMessage').style.display = 'none';
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
         }
 
-        function copyToClipboard(elementId) {
-            const text = document.getElementById(elementId).textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('✅ Copied to clipboard!');
-            }).catch(err => {
-                alert('❌ Failed to copy. Please copy manually.');
-            });
-        }
+        // Load website on page load
+        window.addEventListener('DOMContentLoaded', loadWebsite);
 
-        // Initialize
-        displayProducts();
+        // Reload data every 5 minutes to get fresh updates
+        setInterval(loadWebsite, 5 * 60 * 1000);
     </script>
 </body>
 </html>
