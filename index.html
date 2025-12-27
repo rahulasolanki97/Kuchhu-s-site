@@ -111,9 +111,15 @@ label{font-size:13px;color:#aad4ff;}
   height:120px;
   margin:10px auto;
   object-fit:cover;
-  border:4px solid #aad4ff;
+  border:none;
+  outline:none;
   border-radius:50%;
-  box-shadow:0 5px 20px rgba(170,212,255,0.3);
+  box-shadow:0 0 0 4px #aad4ff, 0 5px 20px rgba(170,212,255,0.3);
+  background:transparent;
+  padding:0;
+}
+#logoPreview:not([src=""]) {
+  background:#fff;
 }
 .loading{
   text-align:center;
