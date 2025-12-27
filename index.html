@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -81,6 +81,10 @@ button{
   cursor:pointer;
   font-weight:bold;
 }
+button:disabled{
+  opacity:0.5;
+  cursor:not-allowed;
+}
 .manage{
   background:#003366;
   padding:10px;
@@ -104,16 +108,31 @@ label{font-size:13px;color:#aad4ff;}
   border:2px solid #aad4ff;
   border-radius:8px;
 }
+.loading{
+  text-align:center;
+  padding:20px;
+  color:#aad4ff;
+}
+.error{
+  background:#ff4444;
+  color:#fff;
+  padding:10px;
+  border-radius:8px;
+  margin:10px 0;
+  text-align:center;
+}
 </style>
 </head>
 
 <body>
 
 <!-- LOGO -->
-<img id="logoPreview" src="" alt="Logo">
+<img id="logoPreview" src="" alt="Logo" style="display:none;">
 
 <h1>Loom Lyric 🧶</h1>
 <p class="tagline">Stitching melody in every loop</p>
+
+<div class="loading" id="loading">Loading products...</div>
 
 <h2>Our Handmade Products</h2>
 <div class="products" id="products"></div>
@@ -129,10 +148,19 @@ label{font-size:13px;color:#aad4ff;}
 <!-- ADMIN PANEL -->
 <div class="admin" id="adminPanel">
   <h2>Admin Dashboard</h2>
+  <div id="adminError"></div>
+
+  <!-- API URL Setup -->
+  <label>Google Apps Script Web App URL (Set this first!)</label>
+  <input id="apiUrl" placeholder="Paste your Google Apps Script URL here">
+  <button onclick="saveApiUrl()">Save API URL</button>
+  <p style="font-size:11px;color:#aad4ff;">You only need to set this once. Get it from Google Apps Script Deploy.</p>
+
+  <hr style="border-color:#aad4ff;margin:20px 0;">
 
   <!-- Logo Upload -->
   <label>Upload / Change Logo</label>
-  <input type="file" id="logo">
+  <input type="file" id="logo" accept="image/*">
   <button onclick="uploadLogo()">Update Logo</button>
 
   <!-- WhatsApp number update -->
@@ -145,6 +173,9 @@ label{font-size:13px;color:#aad4ff;}
   <input id="instagramInput" placeholder="Enter Instagram ID">
   <button onclick="updateInstagram()">Update Instagram ID</button>
 
+  <hr style="border-color:#aad4ff;margin:20px 0;">
+
+  <h3>Add New Product</h3>
   <input id="name" placeholder="Product Name">
   <input id="price" placeholder="Normal Price">
   <input id="specialPrice" placeholder="Special Price (optional)">
@@ -155,7 +186,7 @@ label{font-size:13px;color:#aad4ff;}
   <input type="date" id="endDate">
 
   <textarea id="desc" placeholder="Description"></textarea>
-  <input type="file" id="image">
+  <input type="file" id="image" accept="image/*">
   <button onclick="addProduct()">Add Product</button>
   <button onclick="logout()">Logout</button>
 
@@ -166,116 +197,200 @@ label{font-size:13px;color:#aad4ff;}
 <div class="footer" onclick="toggleLogin()">Admin Access</div>
 
 <script>
-/* ===== LOGIN ===== */
+/* ===== CONFIGURATION ===== */
 const USERNAME = "Harshali";
 const PASSWORD = "Harshali@123";
 
-/* ELEMENTS */
+// Store API URL in localStorage
+let API_URL = localStorage.getItem("loomApiUrl") || "";
+
+/* ===== ELEMENTS ===== */
 const productsDiv = document.getElementById("products");
 const manageDiv = document.getElementById("manage");
 const adminPanel = document.getElementById("adminPanel");
 const loginBox = document.getElementById("loginBox");
-const logoPreview = document.getElementById("logo");
-const whatsappInput = document.getElementById("whatsappNumber");
+const loadingDiv = document.getElementById("loading");
+const adminError = document.getElementById("adminError");
 
 /* ===== DATA ===== */
-let products = JSON.parse(localStorage.getItem("loomProducts")) || [];
-let logoSrc = localStorage.getItem("loomLogo") || "";
-let whatsappNumber = localStorage.getItem("whatsappNumber") || "91YOURNUMBER";
-let instagramID = localStorage.getItem("instagramID") || "loom__lyric";
+let products = [];
+let settings = {
+  logo: "",
+  whatsappNumber: "91YOURNUMBER",
+  instagramID: "loom__lyric"
+};
+
+/* ===== API FUNCTIONS ===== */
+function saveApiUrl() {
+  const url = document.getElementById("apiUrl").value.trim();
+  if (!url) {
+    showError("Please enter the API URL");
+    return;
+  }
+  API_URL = url;
+  localStorage.setItem("loomApiUrl", API_URL);
+  document.getElementById("apiUrl").value = "";
+  alert("API URL saved! Now you can manage products.");
+  loadData();
+}
+
+async function loadData() {
+  if (!API_URL) {
+    loadingDiv.innerHTML = '<p style="color:#ffaa00;">Admin: Please set your Google Apps Script URL first.</p>';
+    return;
+  }
+
+  try {
+    // Load products
+    const prodResponse = await fetch(`${API_URL}?action=getProducts`);
+    const prodData = await prodResponse.json();
+    products = prodData.products || [];
+
+    // Load settings
+    const settingsResponse = await fetch(`${API_URL}?action=getSettings`);
+    const settingsData = await settingsResponse.json();
+    settings = {
+      logo: settingsData.logo || "",
+      whatsappNumber: settingsData.whatsappNumber || "91YOURNUMBER",
+      instagramID: settingsData.instagramID || "loom__lyric"
+    };
+
+    loadingDiv.style.display = "none";
+    render();
+    renderLogo();
+  } catch (error) {
+    console.error("Error loading data:", error);
+    loadingDiv.innerHTML = '<p class="error">Failed to load data. Please check your API URL.</p>';
+  }
+}
+
+async function saveToSheet(action, data) {
+  if (!API_URL) {
+    showError("Please set API URL first");
+    return false;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}?action=${action}`, {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+    const result = await response.json();
+    return result.success;
+  } catch (error) {
+    console.error("Error saving:", error);
+    showError("Failed to save. Check console for details.");
+    return false;
+  }
+}
 
 /* ===== LOGO ===== */
-function renderLogo(){
+function renderLogo() {
   const preview = document.getElementById("logoPreview");
-  if(logoSrc){
-    preview.src = logoSrc;
+  if (settings.logo) {
+    preview.src = settings.logo;
     preview.style.display = "block";
   } else {
     preview.style.display = "none";
   }
 }
-renderLogo();
 
-function uploadLogo(){
+async function uploadLogo() {
   const file = document.getElementById("logo").files[0];
-  if(!file){ alert("Select a logo"); return; }
+  if (!file) {
+    alert("Select a logo");
+    return;
+  }
+
   const reader = new FileReader();
-  reader.onload = function(){
-    logoSrc = reader.result;
-    localStorage.setItem("loomLogo", logoSrc);
-    renderLogo();
+  reader.onload = async function() {
+    const success = await saveToSheet('updateSettings', { logo: reader.result });
+    if (success) {
+      settings.logo = reader.result;
+      renderLogo();
+      alert("Logo updated!");
+    }
   };
   reader.readAsDataURL(file);
 }
 
-/* ===== WhatsApp ===== */
-function updateWhatsApp(){
-  const num = whatsappInput.value.trim();
-  if(num){
-    whatsappNumber = num;
-    localStorage.setItem("whatsappNumber", whatsappNumber);
-    alert("WhatsApp number updated!");
-    whatsappInput.value="";
-    render();
-  } else {
+/* ===== SETTINGS UPDATE ===== */
+async function updateWhatsApp() {
+  const num = document.getElementById("whatsappNumber").value.trim();
+  if (!num) {
     alert("Enter a valid number");
+    return;
+  }
+
+  const success = await saveToSheet('updateSettings', { whatsappNumber: num });
+  if (success) {
+    settings.whatsappNumber = num;
+    alert("WhatsApp number updated!");
+    document.getElementById("whatsappNumber").value = "";
+    render();
   }
 }
 
-/* ===== Instagram ===== */
-function updateInstagram(){
+async function updateInstagram() {
   const id = document.getElementById("instagramInput").value.trim();
-  if(id){
-    instagramID = id;
-    localStorage.setItem("instagramID", instagramID);
+  if (!id) {
+    alert("Enter a valid Instagram ID");
+    return;
+  }
+
+  const success = await saveToSheet('updateSettings', { instagramID: id });
+  if (success) {
+    settings.instagramID = id;
     alert("Instagram ID updated!");
     document.getElementById("instagramInput").value = "";
     render();
-  } else {
-    alert("Enter a valid Instagram ID");
   }
 }
 
 /* ===== HELPERS ===== */
-function save(){
-  localStorage.setItem("loomProducts", JSON.stringify(products));
-}
-
-function currentPrice(p){
+function currentPrice(p) {
   const now = new Date().toISOString().split("T")[0];
-  if(p.specialPrice && p.startDate && p.endDate){
-    if(now >= p.startDate && now <= p.endDate){
+  if (p.specialPrice && p.startDate && p.endDate) {
+    if (now >= p.startDate && now <= p.endDate) {
       return { price: p.specialPrice, old: p.price };
     }
   }
   return { price: p.price };
 }
 
-/* ===== RENDER ===== */
-function render(){
-  let userHTML="", adminHTML="";
-  if(products.length===0){ userHTML="<p style='text-align:center;'>No products yet</p>"; }
+function showError(msg) {
+  adminError.innerHTML = `<p class="error">${msg}</p>`;
+  setTimeout(() => adminError.innerHTML = "", 5000);
+}
 
-  products.forEach((p,i)=>{
+/* ===== RENDER ===== */
+function render() {
+  let userHTML = "", adminHTML = "";
+  
+  if (products.length === 0) {
+    userHTML = "<p style='text-align:center;'>No products yet</p>";
+  }
+
+  products.forEach((p, i) => {
     const cp = currentPrice(p);
 
-    userHTML+=`
+    userHTML += `
       <div class="card">
-        <img src="${p.image}">
+        <img src="${p.image}" alt="${p.name}">
         <h3>${p.name}</h3>
-        ${ cp.old ? `<p class="oldprice">₹${cp.old}</p><p class="price">₹${cp.price}</p>` : `<p class="price">₹${cp.price}</p>` }
+        ${cp.old ? `<p class="oldprice">₹${cp.old}</p><p class="price">₹${cp.price}</p>` : `<p class="price">₹${cp.price}</p>`}
         <p>${p.desc || ""}</p>
         <a class="whatsapp"
-          href="https://wa.me/${whatsappNumber}?text=I want to order ${p.name}">
+          href="https://wa.me/${settings.whatsappNumber}?text=I want to order ${encodeURIComponent(p.name)}">
           Order on WhatsApp
         </a>
         <a class="instagram"
-          href="https://www.instagram.com/${instagramID}" target="_blank">
+          href="https://www.instagram.com/${settings.instagramID}" target="_blank">
           Contact on Instagram
         </a>
       </div>`;
 
-    adminHTML+=`
+    adminHTML += `
       <div class="manage">
         <b>${p.name}</b> - ₹${p.price}<br>
         <button onclick="editProduct(${i})">Edit</button>
@@ -283,68 +398,117 @@ function render(){
       </div>`;
   });
 
-  productsDiv.innerHTML=userHTML;
-  manageDiv.innerHTML=adminHTML;
+  productsDiv.innerHTML = userHTML;
+  manageDiv.innerHTML = adminHTML;
 }
 
 /* ===== ADMIN ACCESS ===== */
-function toggleLogin(){ loginBox.style.display = loginBox.style.display==="block"?"none":"block"; }
-function login(){
-  if(username.value===USERNAME && password.value===PASSWORD){
-    loginBox.style.display="none";
-    adminPanel.style.display="block";
-  }else{ alert("Wrong login"); }
+function toggleLogin() {
+  loginBox.style.display = loginBox.style.display === "block" ? "none" : "block";
 }
-function logout(){ adminPanel.style.display="none"; }
+
+function login() {
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+  
+  if (user === USERNAME && pass === PASSWORD) {
+    loginBox.style.display = "none";
+    adminPanel.style.display = "block";
+    document.getElementById("apiUrl").value = API_URL;
+  } else {
+    alert("Wrong login");
+  }
+}
+
+function logout() {
+  adminPanel.style.display = "none";
+}
 
 /* ===== ADD PRODUCT ===== */
-function addProduct(){
+async function addProduct() {
+  const nameInput = document.getElementById("name");
+  const priceInput = document.getElementById("price");
   const file = document.getElementById("image").files[0];
-  if(!file){ alert("Please select image"); return; }
+
+  if (!nameInput.value || !priceInput.value) {
+    alert("Please enter product name and price");
+    return;
+  }
+
+  if (!file) {
+    alert("Please select an image");
+    return;
+  }
 
   const reader = new FileReader();
-  reader.onload = function(){
-    products.push({
-      name:name.value,
-      price:price.value,
-      specialPrice:specialPrice.value,
-      startDate:startDate.value,
-      endDate:endDate.value,
-      desc:desc.value,
-      image:reader.result
-    });
-    save();
-    render();
-    name.value=price.value=specialPrice.value=startDate.value=endDate.value=desc.value="";
-    image.value="";
+  reader.onload = async function() {
+    const productData = {
+      name: nameInput.value,
+      price: priceInput.value,
+      specialPrice: document.getElementById("specialPrice").value,
+      startDate: document.getElementById("startDate").value,
+      endDate: document.getElementById("endDate").value,
+      desc: document.getElementById("desc").value,
+      image: reader.result
+    };
+
+    const success = await saveToSheet('addProduct', productData);
+    if (success) {
+      alert("Product added!");
+      // Clear form
+      nameInput.value = "";
+      priceInput.value = "";
+      document.getElementById("specialPrice").value = "";
+      document.getElementById("startDate").value = "";
+      document.getElementById("endDate").value = "";
+      document.getElementById("desc").value = "";
+      document.getElementById("image").value = "";
+      
+      // Reload data
+      await loadData();
+    }
   };
   reader.readAsDataURL(file);
 }
 
 /* ===== DELETE ===== */
-function deleteProduct(i){
-  if(confirm("Delete product?")){
-    products.splice(i,1);
-    save();
-    render();
+async function deleteProduct(i) {
+  if (!confirm("Delete this product?")) return;
+
+  const success = await saveToSheet('deleteProduct', { index: i });
+  if (success) {
+    alert("Product deleted!");
+    await loadData();
   }
 }
 
 /* ===== EDIT ===== */
-function editProduct(i){
+async function editProduct(i) {
   const p = products[i];
-  const n = prompt("Name:",p.name);
-  const pr = prompt("Normal Price:",p.price);
-  const sp = prompt("Special Price:",p.specialPrice || "");
-  if(n && pr){
-    products[i] = {...p,name:n,price:pr,specialPrice:sp};
-    save();
-    render();
+  const n = prompt("Product Name:", p.name);
+  const pr = prompt("Normal Price:", p.price);
+  const sp = prompt("Special Price (leave empty if none):", p.specialPrice || "");
+
+  if (n && pr) {
+    const success = await saveToSheet('updateProduct', {
+      index: i,
+      name: n,
+      price: pr,
+      specialPrice: sp,
+      startDate: p.startDate,
+      endDate: p.endDate,
+      desc: p.desc
+    });
+
+    if (success) {
+      alert("Product updated!");
+      await loadData();
+    }
   }
 }
 
 /* ===== INITIAL LOAD ===== */
-render();
+loadData();
 </script>
 
 </body>
