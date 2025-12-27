@@ -1,0 +1,351 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Loom Lyric 🧶</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+  font-family:'Poppins',sans-serif;
+  background:#001f4d;
+  color:#fff;
+  margin:0;
+  padding:20px;
+}
+h1,h2{text-align:center;}
+.tagline{text-align:center;color:#aad4ff;margin-bottom:30px;}
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
+.card{
+  background:#fff;
+  color:#000;
+  border-radius:15px;
+  padding:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+.card img{
+  width:100%;
+  height:250px;
+  object-fit:cover;
+  border-radius:12px;
+}
+.price{font-weight:bold;color:#001f4d;}
+.oldprice{
+  text-decoration:line-through;
+  color:#555;
+  font-size:14px;
+}
+.whatsapp{
+  display:block;
+  background:#25D366;
+  color:#fff;
+  padding:10px;
+  text-align:center;
+  border-radius:8px;
+  text-decoration:none;
+  margin-top:10px;
+}
+.instagram{
+  display:block;
+  background:#C13584;
+  color:#fff;
+  padding:10px;
+  text-align:center;
+  border-radius:8px;
+  text-decoration:none;
+  margin-top:10px;
+}
+.admin{
+  background:#00264d;
+  margin-top:40px;
+  padding:20px;
+  border-radius:15px;
+  display:none;
+}
+input,textarea,button{
+  width:100%;
+  padding:10px;
+  margin:6px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+input[type=file]{border:none;}
+button{
+  background:#aad4ff;
+  color:#001f4d;
+  border:none;
+  cursor:pointer;
+  font-weight:bold;
+}
+.manage{
+  background:#003366;
+  padding:10px;
+  margin:8px 0;
+  border-radius:8px;
+}
+.footer{
+  text-align:center;
+  margin-top:40px;
+  font-size:13px;
+  color:#aad4ff;
+  cursor:pointer;
+}
+label{font-size:13px;color:#aad4ff;}
+#logoPreview{
+  display:block;
+  width:150px;
+  height:80px;
+  margin:10px auto;
+  object-fit:contain;
+  border:2px solid #aad4ff;
+  border-radius:8px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGO -->
+<img id="logoPreview" src="" alt="Logo">
+
+<h1>Loom Lyric 🧶</h1>
+<p class="tagline">Stitching melody in every loop</p>
+
+<h2>Our Handmade Products</h2>
+<div class="products" id="products"></div>
+
+<!-- LOGIN -->
+<div class="admin" id="loginBox">
+  <h2>Admin Login</h2>
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin" id="adminPanel">
+  <h2>Admin Dashboard</h2>
+
+  <!-- Logo Upload -->
+  <label>Upload / Change Logo</label>
+  <input type="file" id="logo">
+  <button onclick="uploadLogo()">Update Logo</button>
+
+  <!-- WhatsApp number update -->
+  <label>WhatsApp Number</label>
+  <input id="whatsappNumber" placeholder="Enter number with country code (e.g., 919876543210)">
+  <button onclick="updateWhatsApp()">Update WhatsApp Number</button>
+
+  <!-- Instagram ID update -->
+  <label>Instagram ID</label>
+  <input id="instagramInput" placeholder="Enter Instagram ID">
+  <button onclick="updateInstagram()">Update Instagram ID</button>
+
+  <input id="name" placeholder="Product Name">
+  <input id="price" placeholder="Normal Price">
+  <input id="specialPrice" placeholder="Special Price (optional)">
+  
+  <label>Special Price Start</label>
+  <input type="date" id="startDate">
+  <label>Special Price End</label>
+  <input type="date" id="endDate">
+
+  <textarea id="desc" placeholder="Description"></textarea>
+  <input type="file" id="image">
+  <button onclick="addProduct()">Add Product</button>
+  <button onclick="logout()">Logout</button>
+
+  <h3>Manage Products</h3>
+  <div id="manage"></div>
+</div>
+
+<div class="footer" onclick="toggleLogin()">Admin Access</div>
+
+<script>
+/* ===== LOGIN ===== */
+const USERNAME = "Harshali";
+const PASSWORD = "Harshali@123";
+
+/* ELEMENTS */
+const productsDiv = document.getElementById("products");
+const manageDiv = document.getElementById("manage");
+const adminPanel = document.getElementById("adminPanel");
+const loginBox = document.getElementById("loginBox");
+const logoPreview = document.getElementById("logo");
+const whatsappInput = document.getElementById("whatsappNumber");
+
+/* ===== DATA ===== */
+let products = JSON.parse(localStorage.getItem("loomProducts")) || [];
+let logoSrc = localStorage.getItem("loomLogo") || "";
+let whatsappNumber = localStorage.getItem("whatsappNumber") || "91YOURNUMBER";
+let instagramID = localStorage.getItem("instagramID") || "loom__lyric";
+
+/* ===== LOGO ===== */
+function renderLogo(){
+  const preview = document.getElementById("logoPreview");
+  if(logoSrc){
+    preview.src = logoSrc;
+    preview.style.display = "block";
+  } else {
+    preview.style.display = "none";
+  }
+}
+renderLogo();
+
+function uploadLogo(){
+  const file = document.getElementById("logo").files[0];
+  if(!file){ alert("Select a logo"); return; }
+  const reader = new FileReader();
+  reader.onload = function(){
+    logoSrc = reader.result;
+    localStorage.setItem("loomLogo", logoSrc);
+    renderLogo();
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ===== WhatsApp ===== */
+function updateWhatsApp(){
+  const num = whatsappInput.value.trim();
+  if(num){
+    whatsappNumber = num;
+    localStorage.setItem("whatsappNumber", whatsappNumber);
+    alert("WhatsApp number updated!");
+    whatsappInput.value="";
+    render();
+  } else {
+    alert("Enter a valid number");
+  }
+}
+
+/* ===== Instagram ===== */
+function updateInstagram(){
+  const id = document.getElementById("instagramInput").value.trim();
+  if(id){
+    instagramID = id;
+    localStorage.setItem("instagramID", instagramID);
+    alert("Instagram ID updated!");
+    document.getElementById("instagramInput").value = "";
+    render();
+  } else {
+    alert("Enter a valid Instagram ID");
+  }
+}
+
+/* ===== HELPERS ===== */
+function save(){
+  localStorage.setItem("loomProducts", JSON.stringify(products));
+}
+
+function currentPrice(p){
+  const now = new Date().toISOString().split("T")[0];
+  if(p.specialPrice && p.startDate && p.endDate){
+    if(now >= p.startDate && now <= p.endDate){
+      return { price: p.specialPrice, old: p.price };
+    }
+  }
+  return { price: p.price };
+}
+
+/* ===== RENDER ===== */
+function render(){
+  let userHTML="", adminHTML="";
+  if(products.length===0){ userHTML="<p style='text-align:center;'>No products yet</p>"; }
+
+  products.forEach((p,i)=>{
+    const cp = currentPrice(p);
+
+    userHTML+=`
+      <div class="card">
+        <img src="${p.image}">
+        <h3>${p.name}</h3>
+        ${ cp.old ? `<p class="oldprice">₹${cp.old}</p><p class="price">₹${cp.price}</p>` : `<p class="price">₹${cp.price}</p>` }
+        <p>${p.desc || ""}</p>
+        <a class="whatsapp"
+          href="https://wa.me/${whatsappNumber}?text=I want to order ${p.name}">
+          Order on WhatsApp
+        </a>
+        <a class="instagram"
+          href="https://www.instagram.com/${instagramID}" target="_blank">
+          Contact on Instagram
+        </a>
+      </div>`;
+
+    adminHTML+=`
+      <div class="manage">
+        <b>${p.name}</b> - ₹${p.price}<br>
+        <button onclick="editProduct(${i})">Edit</button>
+        <button onclick="deleteProduct(${i})">Delete</button>
+      </div>`;
+  });
+
+  productsDiv.innerHTML=userHTML;
+  manageDiv.innerHTML=adminHTML;
+}
+
+/* ===== ADMIN ACCESS ===== */
+function toggleLogin(){ loginBox.style.display = loginBox.style.display==="block"?"none":"block"; }
+function login(){
+  if(username.value===USERNAME && password.value===PASSWORD){
+    loginBox.style.display="none";
+    adminPanel.style.display="block";
+  }else{ alert("Wrong login"); }
+}
+function logout(){ adminPanel.style.display="none"; }
+
+/* ===== ADD PRODUCT ===== */
+function addProduct(){
+  const file = document.getElementById("image").files[0];
+  if(!file){ alert("Please select image"); return; }
+
+  const reader = new FileReader();
+  reader.onload = function(){
+    products.push({
+      name:name.value,
+      price:price.value,
+      specialPrice:specialPrice.value,
+      startDate:startDate.value,
+      endDate:endDate.value,
+      desc:desc.value,
+      image:reader.result
+    });
+    save();
+    render();
+    name.value=price.value=specialPrice.value=startDate.value=endDate.value=desc.value="";
+    image.value="";
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ===== DELETE ===== */
+function deleteProduct(i){
+  if(confirm("Delete product?")){
+    products.splice(i,1);
+    save();
+    render();
+  }
+}
+
+/* ===== EDIT ===== */
+function editProduct(i){
+  const p = products[i];
+  const n = prompt("Name:",p.name);
+  const pr = prompt("Normal Price:",p.price);
+  const sp = prompt("Special Price:",p.specialPrice || "");
+  if(n && pr){
+    products[i] = {...p,name:n,price:pr,specialPrice:sp};
+    save();
+    render();
+  }
+}
+
+/* ===== INITIAL LOAD ===== */
+render();
+</script>
+
+</body>
+</html>
